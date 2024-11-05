@@ -3,8 +3,8 @@
     path: "{{ item }}"
     regexp: "^mirrorlist="
     line: "#mirrorlist="
-    backrefs: yes
-    backup: yes
+    backrefs: true
+    backup: true
   loop: "{{ rocky_repo_files }}"
 
 - name: 替换 baseurl 源
@@ -12,11 +12,11 @@
     path: "{{ item }}"
     regexp: "^#baseurl=http://dl.rockylinux.org/\\$contentdir"
     line: "baseurl={{ rocky_repo_baseurl }}"
-    backrefs: yes
-    backup: yes
+    backrefs: true
+    backup: true
   loop: "{{ rocky_repo_files }}"
 
 - name: 更新缓存
   ansible.builtin.dnf:
-    update_cache: yes
-    state: latest
+    state: present
+    update_cache: true

@@ -1,6 +1,5 @@
----
 - name: 更换 Rocky Linux 源
   hosts: all
-  become: yes
+  become: true
   roles:
     - rocky_repo
