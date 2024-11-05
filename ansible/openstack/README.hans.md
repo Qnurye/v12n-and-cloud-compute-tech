@@ -21,7 +21,7 @@ Controller 节点本人后续可能用于别的用途，给的配置稍微高一
 | controller | 2 x 2 | 4 GB   | 50 GB |
 | compute    | 2 x 1 | 2 GB   | 20 GB |
 
-两个虚拟机通过 NAT 连接外部网络，使用 Host-Only 在 `192.168.255.x` 中直接通信。
+两个虚拟机通过 NAT 连接外部网络，使用 Host-Only 在 `192.168.98.x` 中直接通信。
 
 | Name                | Network   | IP Address     | Subnet Mask | Gateway      |
 | ------------------- | --------- | -------------- | ----------- | ------------ |

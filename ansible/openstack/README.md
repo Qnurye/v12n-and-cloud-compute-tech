@@ -22,7 +22,7 @@ The controller node might be used for other purposes later, so its configuration
 | compute    | 2 x 1 | 2 GB   | 20 GB |
 
 The two virtual machines connect to the external network via NAT and communicate directly with each other on
-`192.168.255.x` using Host-Only networking.
+`192.168.98.x` using Host-Only networking.
 
 | Name                | Network   | IP Address     | Subnet Mask | Gateway      |
 | ------------------- | --------- | -------------- | ----------- | ------------ |
