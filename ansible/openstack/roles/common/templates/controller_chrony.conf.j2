@@ -1,0 +1,6 @@
+allow {{ common_chrony_network }}
+server {{ common_aliyun_ntp_server }} iburst
+local stratum 1
+driftfile /var/lib/chrony/drift
+makestep 1.0 3
+rtcsync

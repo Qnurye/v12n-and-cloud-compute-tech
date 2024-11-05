@@ -1,11 +1,11 @@
 controllers:
   hosts:
-    controller1:
+    controller:
       ansible_host: 192.168.98.128
       ansible_python_interpreter: /usr/bin/python3.9
 
 computes:
   hosts:
-    compute1:
+    compute:
       ansible_host: 192.168.98.129
       ansible_python_interpreter: /usr/bin/python3.9

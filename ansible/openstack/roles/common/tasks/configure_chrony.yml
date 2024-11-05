@@ -1,0 +1,14 @@
+---
+- name: 配置 chrony
+  ansible.builtin.template:
+    src: "{% if inventory_hostname == common_controller_hostname %}controller_chrony.conf.j2{% else %}compute_chrony.conf.j2{% endif %}"
+    dest: /etc/chrony.conf
+    mode: "0644"
+  notify:
+    - 重启 chrony 服务
+
+- name: 设置 chrony 开机自启
+  ansible.builtin.systemd:
+    name: chronyd
+    enabled: true
+    state: started

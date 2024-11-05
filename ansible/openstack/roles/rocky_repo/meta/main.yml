@@ -1,8 +1,0 @@
-galaxy_info:
-  role_name: rocky_repo
-  description: "Ansible role to configure Rocky Linux repository to use USTC mirror"
-  author: "Qnurye"
-  license: "MIT"
-  min_ansible_version: "2.9"
-
-dependencies: []

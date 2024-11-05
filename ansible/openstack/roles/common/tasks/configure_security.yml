@@ -1,0 +1,18 @@
+---
+- name: 停止并禁用防火墙
+  ansible.builtin.systemd:
+    name: firewalld
+    state: stopped
+    enabled: false
+
+- name: 临时关闭 SELinux
+  ansible.builtin.command: setenforcing 0
+  changed_when: false
+  when: ansible_selinux.status == "enabled"
+
+- name: 永久禁用 SELinux
+  ansible.builtin.replace:
+    path: /etc/selinux/config
+    regexp: '^SELINUX=.*'
+    replace: 'SELINUX=disabled'
+  when: ansible_selinux.status == "enabled"

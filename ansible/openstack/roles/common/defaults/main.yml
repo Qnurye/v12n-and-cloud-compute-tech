@@ -1,0 +1,8 @@
+---
+common_rocky_repo_baseurl: "https://mirrors.ustc.edu.cn/rocky"
+common_rocky_repo_files:
+  - "/etc/yum.repos.d/rocky-extras.repo"
+  - "/etc/yum.repos.d/rocky.repo"
+common_chrony_network: "192.168.98.0/24"
+common_controller_hostname: "controller"
+common_aliyun_ntp_server: "ntp.aliyun.com"

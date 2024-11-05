@@ -1,5 +1,5 @@
-- name: 更换 Rocky Linux 源
+- name: 安装设置基础支撑服务
   hosts: all
   become: true
   roles:
-    - rocky_repo
+    - common

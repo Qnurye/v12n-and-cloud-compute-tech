@@ -1,0 +1,10 @@
+---
+- name: 检查 chrony 状态
+  ansible.builtin.command: chronyc sources
+  changed_when: false
+  register: chrony_status
+
+- name: 输出 chrony 服务状态
+  ansible.builtin.debug:
+    msg: "Chrony 服务状态: {{ chrony_status.stdout }}"
+  when: chrony_status is defined
