@@ -1,0 +1,5 @@
+---
+rocky_repo_baseurl: "https://mirrors.ustc.edu.cn/rocky"
+rocky_repo_files:
+  - "/etc/yum.repos.d/rocky-extras.repo"
+  - "/etc/yum.repos.d/rocky.repo"

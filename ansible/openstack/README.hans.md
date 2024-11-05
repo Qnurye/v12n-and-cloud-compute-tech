@@ -1,3 +1,5 @@
+[English](README.md) | 简体中文
+
 # 使用 Ansible Playbooks 构建和部署 OpenStack 服务器
 
 课程提供的参考资料:
