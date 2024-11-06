@@ -1,0 +1,53 @@
+---
+- name: 安装 Memcached 及 Python-memcached
+  ansible.builtin.dnf:
+    name:
+      - memcached
+      - python-memcached
+    state: present
+
+- name: 检查是否存在名为 "memcached" 的用户
+  ansible.builtin.command:
+    cmd: cat /etc/passwd | grep -i memcached
+  changed_when: false
+  register: memcached_user_check
+
+- name: 输出 Memcached 用户检查结果
+  ansible.builtin.debug:
+    msg: "Memcached 用户信息: {{ memcached_user_check.stdout }}"
+
+- name: 配置 Memcached 监听地址
+  ansible.builtin.lineinfile:
+    path: /etc/sysconfig/memcached
+    regexp: '^OPTIONS='
+    line: 'OPTIONS="-l 192.168.98.128"'
+    mode: "0644"
+    create: true
+    state: present
+
+- name: 启动并设置 Memcached 开机自启
+  ansible.builtin.systemd:
+    name: memcached
+    enabled: true
+    state: started
+
+- name: 检查 Memcached 服务运行状态
+  ansible.builtin.systemd:
+    name: memcached
+  changed_when: false
+  failed_when: "memcached_status.status.ActiveState != 'active'"
+  register: memcached_status
+
+- name: 输出 Memcached 服务状态信息
+  ansible.builtin.debug:
+    msg: "Memcached 服务状态: {{ memcached_status.status }}"
+
+- name: 测试 Memcached 端口监听
+  ansible.builtin.command:
+    cmd: netstat -tnulp | grep memcached
+  changed_when: false
+  register: memcached_ports
+
+- name: 输出 Memcached 端口监听状态
+  ansible.builtin.debug:
+    msg: "Memcached 监听端口信息: {{ memcached_ports.stdout }}"

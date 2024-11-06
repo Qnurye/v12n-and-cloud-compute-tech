@@ -1,0 +1,51 @@
+---
+- name: 安装 RabbitMQ 服务器
+  ansible.builtin.dnf:
+    name: rabbitmq-server
+    state: present
+
+- name: 启动并设置 RabbitMQ 开机自启
+  ansible.builtin.systemd:
+    name: rabbitmq-server
+    enabled: true
+    state: started
+
+- name: 检查 RabbitMQ 服务运行状态
+  ansible.builtin.systemd:
+    name: rabbitmq-server
+  failed_when: "rabbitmq_status.status.ActiveState != 'active'"
+  register: rabbitmq_status
+
+- name: 输出 RabbitMQ 服务状态信息
+  ansible.builtin.debug:
+    msg: "RabbitMQ 服务状态: {{ rabbitmq_status.status }}"
+
+- name: 检查 RabbitMQ 端口监听 (5672 和 25672)
+  ansible.builtin.command:
+    cmd: netstat -tnlup | grep -E '5672|25672'
+  changed_when: false
+  register: rabbitmq_ports
+
+- name: 输出 RabbitMQ 端口监听状态
+  ansible.builtin.debug:
+    msg: "RabbitMQ 监听端口信息: {{ rabbitmq_ports.stdout }}"
+
+- name: 创建 RabbitMQ 用户 "openstack"
+  ansible.builtin.command: rabbitmqctl add_user openstack 000000
+  args:
+    creates: /var/lib/rabbitmq/.erlang.cookie
+  when: rabbitmq_status.status.ActiveState == 'active'
+
+- name: 设置 RabbitMQ 用户 "openstack" 的权限
+  ansible.builtin.command: rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+  changed_when: false
+  when: rabbitmq_status.status.ActiveState == 'active'
+
+- name: 查看 RabbitMQ 用户 "openstack" 的权限
+  ansible.builtin.command: rabbitmqctl list_user_permissions openstack
+  changed_when: false
+  register: rabbitmq_permissions
+
+- name: 输出 RabbitMQ 用户 "openstack" 权限信息
+  ansible.builtin.debug:
+    msg: "RabbitMQ 用户权限: {{ rabbitmq_permissions.stdout }}"

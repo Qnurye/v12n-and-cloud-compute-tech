@@ -1,0 +1,19 @@
+---
+- name: 安装 vsftpd
+  ansible.builtin.dnf:
+    name: vsftpd
+    state: present
+
+- name: 配置 FTP 主目录为 /opt
+  ansible.builtin.template:
+    src: vsftpd.conf.j2
+    dest: /etc/vsftpd/vsftpd.conf
+    mode: "0644"
+  notify:
+    - 重启 vsftpd
+
+- name: 设置 vsftpd 开机自启并启动服务
+  ansible.builtin.systemd:
+    name: vsftpd
+    enabled: true
+    state: started

@@ -1,0 +1,47 @@
+---
+- name: 安装 MariaDB 数据库及依赖
+  ansible.builtin.dnf:
+    name:
+      - mariadb
+      - mariadb-server
+      - python2-PyMySQL
+    state: present
+
+- name: 配置 MariaDB 数据库参数
+  ansible.builtin.template:
+    src: openstack.cnf.j2
+    dest: /etc/my.cnf.d/openstack.cnf
+    mode: '0644'
+  notify:
+    - 重启 MariaDB
+
+- name: 设置 MariaDB 开机自启并启动服务
+  ansible.builtin.systemd:
+    name: mariadb
+    enabled: true
+    state: started
+
+- name: 检查 MariaDB 运行状态
+  ansible.builtin.systemd:
+    name: mariadb
+  failed_when: "mariadb.status.ActiveState != 'active'"
+  register: mariadb_status
+
+- name: 输出 MariaDB 状态信息
+  ansible.builtin.debug:
+    msg: "MariaDB 服务状态: {{ mariadb_status.status }}"
+
+- name: 初始化 MariaDB 数据库
+  ansible.builtin.expect:
+    command: mysql_secure_installation
+    responses:
+      'Enter current password for root (enter for none):': ''
+      'Set root password? \[Y/n\]': 'Y'
+      'New password:': 'password'
+      'Re-enter new password:': 'password'
+      'Remove anonymous users? \[Y/n\]': 'Y'
+      'Disallow root login remotely? \[Y/n\]': 'Y'
+      'Remove test database and access to it? \[Y/n\]': 'Y'
+      'Reload privilege tables now? \[Y/n\]': 'Y'
+  when: mariadb_status.status.ActiveState == 'active'
+  no_log: true

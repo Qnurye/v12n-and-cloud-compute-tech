@@ -1,0 +1,40 @@
+---
+- name: 安装 etcd
+  ansible.builtin.dnf:
+    name: etcd
+    state: present
+
+- name: 配置 etcd 服务器
+  ansible.builtin.lineinfile:
+    path: /etc/etcd/etcd.conf
+    regexp: '^ETCD_LISTEN_CLIENT_URLS='
+    line: 'ETCD_LISTEN_CLIENT_URLS="http://192.168.98.128:2379"'  # 根据实际 IP 配置
+    create: true
+    mode: "0644"
+  notify: 重启 etcd
+
+- name: 启动并设置 etcd 开机自启
+  ansible.builtin.systemd:
+    name: etcd
+    enabled: true
+    state: started
+
+- name: 检查 etcd 服务运行状态
+  ansible.builtin.systemd:
+    name: etcd
+  failed_when: "etcd_status.status.ActiveState != 'active'"
+  register: etcd_status
+
+- name: 输出 etcd 服务状态信息
+  ansible.builtin.debug:
+    msg: "etcd 服务状态: {{ etcd_status.status }}"
+
+- name: 检查 etcd 端口监听
+  ansible.builtin.command:
+    cmd: netstat -tnlup | grep etcd
+  changed_when: false
+  register: etcd_ports
+
+- name: 输出 etcd 端口监听状态
+  ansible.builtin.debug:
+    msg: "etcd 监听端口信息: {{ etcd_ports.stdout }}"

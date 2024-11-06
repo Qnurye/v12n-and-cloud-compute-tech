@@ -1,0 +1,15 @@
+---
+- name: 安装和配置 FTP 服务器
+  ansible.builtin.import_tasks: setup_ftp.yml
+
+- name: 安装和配置 MariaDB 数据库
+  ansible.builtin.import_tasks: setup_mariadb.yml
+
+- name: 安装和配置 RabbitMQ 消息队列
+  ansible.builtin.import_tasks: setup_rabbitmq.yml
+
+- name: 安装和配置 Memcached 内存缓存服务
+  ansible.builtin.import_tasks: setup_memcached.yml
+
+- name: 安装和配置 etcd 分布式键值存储系统
+  ansible.builtin.import_tasks: setup_etcd.yml

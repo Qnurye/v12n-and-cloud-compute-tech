@@ -1,0 +1,15 @@
+---
+- name: 重启 vsftpd
+  ansible.builtin.systemd:
+    name: vsftpd
+    state: restarted
+
+- name: 重启 MariaDB
+  ansible.builtin.systemd:
+    name: mariadb
+    state: restarted
+
+- name: 重启 etcd
+  ansible.builtin.systemd:
+    name: etcd
+    state: restarted
