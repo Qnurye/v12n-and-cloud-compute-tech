@@ -1,0 +1,28 @@
+---
+- name: 安装 chrony
+  ansible.builtin.dnf:
+    name: chrony
+    state: present
+
+- name: 安装 net-tools
+  ansible.builtin.dnf:
+    name: net-tools
+    state: present
+
+- name: 安装 OpenStack Zed 仓库
+  ansible.builtin.dnf:
+    name: centos-release-openstack-zed
+    state: present
+  notify: 清理并更新 YUM 缓存
+
+- name: 安装 openstack 客户端
+  ansible.builtin.dnf:
+    name: python3-openstackclient
+    state: present
+  when: not ansible_check_mode
+
+- name: 安装 openstack-selinux
+  ansible.builtin.dnf:
+    name: openstack-selinux
+    state: present
+  when: not ansible_check_mode

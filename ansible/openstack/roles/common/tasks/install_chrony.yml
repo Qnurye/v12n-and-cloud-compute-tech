@@ -1,5 +1,0 @@
----
-- name: 安装 chrony
-  ansible.builtin.dnf:
-    name: chrony
-    state: present

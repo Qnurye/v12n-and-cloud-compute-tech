@@ -1,5 +1,11 @@
-- name: 安装设置基础支撑服务
+- name: 基础环境配置
   hosts: all
   become: true
   roles:
     - common
+
+- name: Controller 节点 OpenStack 服务依赖安装
+  hosts: controllers
+  become: true
+  roles:
+    - controller

@@ -1,12 +1,15 @@
 ---
+- name: 配置系统代理
+  ansible.builtin.import_tasks: configure_proxy.yml
+
 - name: 配置防火墙和 SELinux
   ansible.builtin.import_tasks: configure_security.yml
 
 - name: 设置 Rocky Linux 安装源
   ansible.builtin.import_tasks: setup_repo.yml
 
-- name: 安装 chrony 服务
-  ansible.builtin.import_tasks: install_chrony.yml
+- name: 安装基础软件包
+  ansible.builtin.import_tasks: install_dependencies.yml
 
 - name: 配置 chrony 服务
   ansible.builtin.import_tasks: configure_chrony.yml

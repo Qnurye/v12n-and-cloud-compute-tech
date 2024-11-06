@@ -3,3 +3,7 @@
   ansible.builtin.systemd:
     name: chronyd
     state: restarted
+
+- name: 清理并更新 YUM 缓存
+  ansible.builtin.command: dnf clean all && dnf makecache
+  changed_when: false

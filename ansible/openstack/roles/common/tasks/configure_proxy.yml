@@ -1,0 +1,18 @@
+---
+- name: 配置系统 HTTP 和 HTTPS 代理
+  ansible.builtin.lineinfile:
+    path: /etc/profile.d/proxy.sh
+    line: 'export {{ item }}=http://192.168.98.1:7890'
+    create: true
+    state: present
+    mode: "0644"
+  loop:
+    - http_proxy
+    - https_proxy
+    - HTTP_PROXY
+    - HTTPS_PROXY
+
+- name: 使配置生效
+  ansible.builtin.command:
+    cmd: source /etc/profile.d/proxy.sh
+  changed_when: false
